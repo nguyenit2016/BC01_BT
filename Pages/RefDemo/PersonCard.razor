@@ -1,0 +1,28 @@
+<div class="card">
+    <img class="w-25" src="https://i.pravatar.cc?u=10"/>
+    <div class="card-body">
+        <h3 class="card-title">Name: abc</h3>
+        <button class="btn btn-primary" @onclick="e => HandleLikeDisLike(true)">
+            @Like Like
+        </button>
+        <button class="btn btn-danger" @onclick="e => HandleLikeDisLike(false)">
+            @DisLike UnLike
+        </button>
+    </div>
+</div>
+
+@code {
+    private int Like{get;set;} = 0;
+    private int DisLike{get;set;} = 0;
+
+    public void HandleLikeDisLike(bool condition){
+        Console.WriteLine("ayx");
+        if(condition){
+            Like += 1;
+        }else{
+            DisLike += 1;
+        }
+        //cập nhật lại giao diện bằng cơm vì dùng @ref ở component cha
+        StateHasChanged();
+    }
+}

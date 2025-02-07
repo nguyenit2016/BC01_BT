@@ -1,0 +1,23 @@
+@page "/car-store"
+@layout MainLayout
+
+<div class="container">
+    <Modal prodDetail = "@carStoreState" />
+    <ProductList lstProduct="@lstCar" carDetail = "ViewDetail" />
+</div>
+
+@code {
+    void ViewDetail(CarStoreVM car){
+        carStoreState = car;
+    }
+    public CarStoreVM carStoreState = new CarStoreVM(){
+        Id= "1", Name= "black car", Img= "./img/black-car.jpg", Price= 1000
+    };
+
+    public List<CarStoreVM> lstCar { get; set; } = new List<CarStoreVM>()
+    {
+        new CarStoreVM(){ Id= "1", Name= "black car", Img= "./img/black-car.jpg", Price= 1000 },
+        new CarStoreVM(){ Id= "2", Name= "red car", Img= "./img/red-car.jpg", Price= 2000 },
+        new CarStoreVM(){ Id= "3", Name= "silver car", Img= "./img/silver-car.jpg", Price= 3000 }
+    };
+}

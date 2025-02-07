@@ -1,0 +1,50 @@
+@page "/update-product/{id}"
+@layout MainLayout
+@inject ProductServices productSV
+
+<div class="container">
+    <h3>Product detai - @id</h3>
+    <form>
+        <div class="mb-3 row">
+            <label for="inputName" class="col-sm-2 col-form-label">Tên sản phẩm</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputName" value="@productSV.productDetail.Name">
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="inputPrice" class="col-sm-2 col-form-label">Gía sản phẩm</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputPrice" value="@productSV.productDetail.Price">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" @onclick="HandleSubmit">Submit</button>
+    </form>
+</div>
+
+
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        productSV.OnChange += StateHasChanged;
+        productSV.GetProductById(id);
+    }
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await base.SetParametersAsync(parameters);
+        productSV.OnChange += StateHasChanged;
+    }
+
+    public void HandleSubmit(){
+        productSV.UpdateProduct();
+        productSV.OnChange += StateHasChanged;
+    }
+    public void Dispose()
+    {
+        productSV.OnChange -= StateHasChanged;
+    }
+}

@@ -1,0 +1,62 @@
+@page "/crypto-portfolio"
+@layout MainLayout
+@inject CryptoServices cryptoSV;
+
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">All Cryptocurrencies</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th></th>
+                            <th>Coin</th>
+                            <th>Price</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Coin item in cryptoSV.lstCoin)
+                        {
+                            <tr>
+                                <td class=""><img width="40" src="@item.image" /></td>
+                                <td>@item.name (@item.symbol)</td>
+                                <td>$@item.current_price</td>
+                                <td>
+                                    <button class="btn btn-primary" @onclick="() => AddFavorite(item.id)">Add</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <Favorites />
+    </div>
+</div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        //StateHasChanged();
+        cryptoSV.OnChange += StateHasChanged;
+
+        cryptoSV.GetCoinAsync();
+    }
+
+    public void AddFavorite(string id)
+    {
+        cryptoSV.AddFavorite(id);
+    }
+
+    public void Dispose()
+    {
+        cryptoSV.OnChange -= StateHasChanged;
+    }
+
+}

@@ -1,0 +1,40 @@
+@page "/product-detail/{prodId}"
+@layout MainLayout
+@inject ProductServices productSV
+
+<div class="container">
+    <h3>Product detai - @prodId</h3>
+    <div class="row">
+        <div class="col-4">
+            <img class="w-100" src="@productSV.productDetail.Image" />
+        </div>
+        <div class="col-8">
+            <h3>@productSV.productDetail.Name</h3>
+            <p>@productSV.productDetail.Description</p>
+            <button class="btn btn-success">
+                <span class="oi oi-plus" aria-hidden="true"></span>Add to cart
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string prodId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        productSV.OnChange += StateHasChanged;
+        productSV.GetProductById(prodId);
+    }
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await base.SetParametersAsync(parameters);
+        productSV.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        productSV.OnChange -= StateHasChanged;
+    }
+}

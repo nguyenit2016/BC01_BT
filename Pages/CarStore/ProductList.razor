@@ -1,0 +1,17 @@
+<div>
+    <div class="row">
+    @foreach(CarStoreVM item in lstProduct){
+        <div class="col-3">
+            <ProductItem product = "@item" carDetail = "carDetail"/>
+        </div>
+    }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public List<CarStoreVM> lstProduct{get;set;}
+
+    [Parameter]
+    public EventCallback<CarStoreVM> carDetail{get;set;}
+}

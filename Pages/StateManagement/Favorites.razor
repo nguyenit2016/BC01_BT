@@ -1,0 +1,49 @@
+@inject CryptoServices cryptoSV
+
+<div class="card">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Your Favorites</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th></th>
+                    <th>Coin</th>
+                    <th>Price</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Coin item in cryptoSV.lstCoinFavorite)
+                {
+                    <tr>
+                        <td class=""><img width="40" src="@item.image" /></td>
+                        <td>@item.name (@item.symbol)</td>
+                        <td>$@item.current_price</td>
+                        <td>
+                            <button class="btn btn-danger" @onclick="() => RemoveFavorite(item.id)">Remove</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        cryptoSV.OnChange += StateHasChanged;
+    }
+
+    public void RemoveFavorite(string id)
+    {
+        cryptoSV.RemoveFavorite(id);
+    }
+
+    public void Dispose()
+    {
+        cryptoSV.OnChange -= StateHasChanged;
+    }
+}

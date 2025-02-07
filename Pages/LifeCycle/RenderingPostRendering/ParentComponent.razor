@@ -1,0 +1,40 @@
+@page "/rendering"
+
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <h3 class="">Parent component</h3>
+            <div class="card">
+                <h3 class="card-title">Static card</h3>
+                <p class="card-text">Fixed information</p>
+                <p>This is a static card that does not changed</p>
+            </div>
+            <button class="btn btn-success" @onclick=ParentRender>Parent render (@count)</button>
+            <button class="btn btn-primary" @onclick=AddNotify>Add Notify</button>
+        </div>
+        <div class="col-8">
+            <h3>Dynamic notification list</h3>
+            <NotifyList lstString = "@lstString"/>
+        </div>
+    </div>
+</div>
+
+@code {
+    int count{get;set;} = 1;
+    List<string> lstString = new List<string>(){
+        "Thong bao 1",
+        "Thong bao 2",
+        "Thong bao 3"
+    };
+    void ParentRender(){
+        count +=1;
+    }
+    void AddNotify(){
+        int count = lstString.Count() + 1;
+        lstString.Add($"Thong bao {count}");
+    }
+
+    protected override void OnAfterRender(bool firstRender){
+        Console.WriteLine($"Component parent rendered, first render {firstRender}");
+    }
+}

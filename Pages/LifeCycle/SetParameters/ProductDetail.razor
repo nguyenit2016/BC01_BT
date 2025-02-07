@@ -1,0 +1,68 @@
+@page "/detail/{id}"
+@inject HttpClient _http
+@using System.Net.Http.Json
+
+<div class="container">
+    <h3>Product detai - @id</h3>
+    <div class="row">
+        <div class="col-4">
+            <img class="w-100" src="@product.Img" />
+        </div>
+        <div class="col-8">
+            <h3>@product.Name</h3>
+            <p>@product.Description</p>
+            <button class="btn btn-success">
+                <span class="oi oi-plus" aria-hidden="true"></span>Add to cart
+            </button>
+        </div>
+    </div>
+
+    <h3>Sản phẩm liên quan</h3>
+    <div class="row">
+        @foreach (ProductModel prod in lstProduct)
+        {
+            <div class="col-4">
+                <div class="card">
+                    <img src="@prod.Img" />
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">@prod.Name - @prod.Id</h3>
+                    <p class="card-text">@prod.Price</p>
+                    <a href="/detail/@prod.Id">Detail</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+    private ProductModel product { get; set; } = new ProductModel();
+    private List<ProductModel> lstProduct { get; set; } = new List<ProductModel>();
+
+    // hàm sẽ chạy sau khi html của component được render (chạy 1 lần duy nhất)
+    // protected override OnInitialized()
+    protected override async Task OnInitializedAsync()
+    {
+        GetData();
+    }
+
+    // Chạy mỗi khi tham số của component có sự thay đổi
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await base.SetParametersAsync(parameters);
+        // Gọi API từ server khác
+        var result = await _http.GetFromJsonAsync<ProductModel>($"https://svcy.myclass.vn/api/ProductApi/get/{id}");
+        product = result;
+        StateHasChanged();
+    }
+
+    async void GetData()
+    {
+        // Gọi API từ server khác
+        var result = await _http.GetFromJsonAsync<List<ProductModel>>("https://svcy.myclass.vn/api/ProductApi/getall");
+        lstProduct = result.ToList();
+        StateHasChanged();
+    }
+}

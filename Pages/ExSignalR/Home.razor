@@ -1,0 +1,41 @@
+@page "/home"
+@inject NavigationManager navigation
+@layout MainLayout
+
+<div class="row">
+    @foreach (ProductVM item in products)
+    {
+        <div class="col-3 mb-3">
+            <div class="card">
+                <img src="@item.Image" />
+                <div class="card-body">
+                    <h5 class="card-title">@item.Name - @item.Id</h5>
+                    <p>@item.Price</p>
+                    <a href="/product-detail/@item.Id">View detail</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    HubConnection roomHub;
+    List<ProductVM> products = new List<ProductVM>();
+    protected override async Task OnInitializedAsync()
+    {
+        roomHub = new HubConnectionBuilder().WithUrl(navigation.ToAbsoluteUri("/room-hub")).Build();
+        //Kết nối
+        await roomHub.StartAsync();
+
+        //lắng nghe server hub
+        roomHub.On<List<ProductVM>>("GetProducts", async (lstProduct) => {
+            products = lstProduct;
+            await InvokeAsync(StateHasChanged);
+        });
+    }
+
+    public async Task Dispose() {
+        //Ngắt kết nối
+        await roomHub.StopAsync();
+    }
+}

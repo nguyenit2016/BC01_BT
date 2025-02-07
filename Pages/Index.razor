@@ -1,0 +1,51 @@
+﻿@page "/"
+@inject ProductServices productSV
+@layout MainLayout
+
+<div class="row">
+    <form class="row g-6">
+        <div class="col-auto">
+            <input type="text" class="form-control" bind-Value="keyword" id="keyword" placeholder="Search">
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-success mb-3" @onclick="Search">Search</button>
+        </div>
+    </form>
+
+    @foreach (ProductVM item in productSV.products)
+    {
+        <div class="col-3 mb-3">
+            <div class="card">
+                <img src="@item.Image" />
+                <div class="card-body">
+                    <h5 class="card-title">@item.Name - @item.Id</h5>
+                    <p>@item.Price</p>
+                    <a href="/product-detail/@item.Id">View detail</a>
+                    <button class="btn btn-danger" @onclick="() => Delete(item.Id)">Xóa</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    public string keyword{get;set;} = "";
+    HubConnection roomHub;
+    List<ProductVM> products = new List<ProductVM>();
+    protected override async Task OnInitializedAsync()
+    {
+        productSV.OnChange += StateHasChanged;
+        await productSV.GetProducts();
+    }
+    public void Search(){
+        Console.WriteLine(keyword);
+    }
+    public async Task Delete(double id){
+        await productSV.DeleteProduct(id);
+        productSV.OnChange += StateHasChanged;
+    }
+    public void Dispose()
+    {
+        productSV.OnChange -= StateHasChanged;
+    }
+}

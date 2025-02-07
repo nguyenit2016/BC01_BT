@@ -1,0 +1,55 @@
+﻿<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">web_blazor_server</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All"> Home
+            </NavLink>
+            <NavLink class="nav-link" href="/ref-demo" Match="NavLinkMatch.All">Ref demo
+            </NavLink>
+            <li class="dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Life cycle</a>
+                <div class="dropdown-menu bg-dark" aria-labelledby="dropdownId">
+                    <NavLink class="dropdown-item" href="/on-init">On Init demo</NavLink>
+                    <NavLink class="dropdown-item" href="/detail/{id}">Set parameter</NavLink>
+                    <NavLink class="dropdown-item" href="/rendering">Rendering</NavLink>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">State management</a>
+                <div class="dropdown-menu bg-dark" aria-labelledby="dropdownId">
+                    <NavLink class="dropdown-item" href="/count-page">Count page</NavLink>
+                    <NavLink class="dropdown-item" href="/crypto-portfolio">Crypto Portfolio</NavLink>
+                </div>
+            </li>
+            <NavLink class="nav-link" href="/signalR-room" Match="NavLinkMatch.All">SignalR demo
+            </NavLink>
+            <li class="dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Bài tập signalR</a>
+                <div class="dropdown-menu bg-dark" aria-labelledby="dropdownId">
+                    <NavLink class="dropdown-item" href="/home">User Management</NavLink>
+                    <NavLink class="dropdown-item" href="/admin/product">Thêm/sửa product</NavLink>
+                    <NavLink class="dropdown-item" href="/admin/product-management">Product Management</NavLink>
+                </div>
+            </li>
+        </div>
+    </nav>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

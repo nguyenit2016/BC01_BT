@@ -1,0 +1,31 @@
+@foreach (string item in lstString)
+{
+    <div class="p-3 border border-secondary d-flex">
+        <p class="w-75">
+            @item
+        </p>
+        <button class="btn btn-danger">Dismiss</button>
+    </div>
+}
+
+@code {
+    int count { get; set; } = 1;
+    [Parameter]
+    public List<string> lstString { get; set; } = new List<string>();
+    public List<string> preLstString { get; set; } = new List<string>();
+
+    protected override bool ShouldRender(){
+        // Neu lstString co su thay doi du lieu thi return true => render lai UI
+        if(!Enumerable.SequenceEqual(lstString, preLstString)){
+            Console.WriteLine("khac nhau");
+            preLstString = new List<string>(lstString);
+            return true;
+        }
+        return false;
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        Console.WriteLine($"Component child rendered, first render {firstRender}");
+    }
+}

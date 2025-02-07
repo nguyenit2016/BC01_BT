@@ -1,0 +1,26 @@
+@page "/count-page"
+@layout MainLayout
+@inject CountService countSV
+
+<div class="container">
+    <h3>Demo count state</h3>
+    <h3>Count: @countSV.Count</h3>
+    <button class="btn btn-success" @onclick="InCrease">In Crease</button>
+    <button class="btn btn-warning" @onclick="DeCrease">De Crease</button>
+    
+</div>
+
+@code {
+    protected override void OnInitialized(){
+        countSV.OnChange += StateHasChanged;
+    }
+    void InCrease(){
+        countSV.InCrease();
+    }
+    void DeCrease(){
+        countSV.DeCrease();
+    }
+    public void Dispose(){
+        countSV.OnChange -= StateHasChanged;
+    }
+}

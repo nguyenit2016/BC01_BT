@@ -1,0 +1,18 @@
+@page "/ref-demo"
+@layout MainLayout
+
+<div class="container">
+    <PersonCard @ref="TagPersonCard"/>
+
+    <button class="btn btn-primary" @onclick="HandleLike">
+        Like
+    </button>
+</div>
+
+@code {
+    public PersonCard TagPersonCard{get;set;}
+    public void HandleLike(){
+        Console.WriteLine("abc");
+        TagPersonCard.HandleLikeDisLike(true);
+    }
+}
